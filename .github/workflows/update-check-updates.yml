@@ -1,0 +1,44 @@
+name: Update check-updates
+
+# Met la formule à jour dès qu'un nouveau tag vX.Y.Z de check-updates est publié :
+# elle est reprise de packaging/homebrew/check-updates.rb, avec l'url et le sha256 de l'archive.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update the formula from the latest tag
+        run: |
+          set -euo pipefail
+          repo=https://github.com/AntoineCAU/check-updates
+          tag=$(git ls-remote --tags --refs --sort=-v:refname "$repo.git" 'v*' | head -1 | sed 's#.*refs/tags/##')
+          url="$repo/archive/refs/tags/$tag.tar.gz"
+          if grep -qF "$url" Formula/check-updates.rb; then
+            echo "Already at $tag"
+            exit 0
+          fi
+
+          curl -fsSL -o source.tar.gz "$url"
+          test -s source.tar.gz
+          sha=$(sha256sum source.tar.gz | cut -d' ' -f1)
+          tar -xzOf source.tar.gz --wildcards '*/packaging/homebrew/check-updates.rb' \
+            | sed '1,2d' \
+            | sed -e "s#^  url \".*\"#  url \"$url\"#" -e "s#^  sha256 \".*\"#  sha256 \"$sha\"#" \
+            > Formula/check-updates.rb
+          rm source.tar.gz
+          grep -qF "$url" Formula/check-updates.rb
+          grep -qF "$sha" Formula/check-updates.rb
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "check-updates ${tag#v}"
+          git push
