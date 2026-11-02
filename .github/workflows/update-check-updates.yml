@@ -21,6 +21,7 @@ jobs:
           set -euo pipefail
           repo=https://github.com/AntoineCAU/check-updates
           tag=$(git ls-remote --tags --refs --sort=-v:refname "$repo.git" 'v*' | head -1 | sed 's#.*refs/tags/##')
+          [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Unexpected tag: $tag"; exit 1; }
           url="$repo/archive/refs/tags/$tag.tar.gz"
           if grep -qF "$url" Formula/check-updates.rb; then
             echo "Already at $tag"
