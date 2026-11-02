@@ -1,8 +1,8 @@
 class CheckUpdates < Formula
   desc "Find what is out of date on your Mac and update it from a checklist"
   homepage "https://github.com/AntoineCAU/check-updates"
-  url "https://github.com/AntoineCAU/check-updates/archive/refs/tags/v0.1.1.tar.gz"
-  sha256 "345c7f56ac12d49d6ed50f58b86f737b4ca7c802f58d35053762ce76e09ac314"
+  url "https://github.com/AntoineCAU/check-updates/archive/refs/tags/v0.1.2.tar.gz"
+  sha256 "36140343be2a7fd83b9f5d1dae84d29e2025cdc7aba34b7f3920b7fd9672dfe7"
   license "MIT"
 
   depends_on :macos
@@ -14,11 +14,11 @@ class CheckUpdates < Formula
 
   def caveats
     <<~EOS
-      To check every day and get a window listing the available updates:
-        check-updates install
+      Check now:
+        check-updates
 
-      To make sure everything works on this Mac:
-        check-updates doctor
+      Check every day (off by default):
+        check-updates schedule on [HH:MM]
     EOS
   end
 
