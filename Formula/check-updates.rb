@@ -1,8 +1,8 @@
 class CheckUpdates < Formula
   desc "Find what is out of date on your Mac and update it from a checklist"
   homepage "https://github.com/AntoineCAU/check-updates"
-  url "https://github.com/AntoineCAU/check-updates/archive/refs/tags/v0.2.3.tar.gz"
-  sha256 "5e4d39294d42ef21c55c7970c252d6dfb3c88a6560fa0b48b3f9f88494ac938c"
+  url "https://github.com/AntoineCAU/check-updates/archive/refs/tags/v0.3.0.tar.gz"
+  sha256 "11771b82dc56543cdffc057d63f55fc62f5cdde49dab43f2f24db6666124f67a"
   license "MIT"
 
   depends_on :macos
